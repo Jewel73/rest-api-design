@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.hidetake.swagger.generator' version '2.19.2'
 }
 
 group = 'com.jewel'
@@ -16,9 +17,51 @@ repositories {
 }
 
 dependencies {
+	swaggerCodegen 'org.openapitools:openapi-generator-cli:6.2.1'
+	compileOnly 'io.swagger:swagger-annotations:1.6.4'
+	compileOnly 'org.springframework.boot:spring-boot-starter-validation'
+	compileOnly 'org.openapitools:jackson-databind-nullable:0.2.3'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'io.springfox:springfox-oas:3.0.0'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
 }
+
+swaggerSources {
+	def typeMappings = 'URI=URI'
+	def importMappings = 'URI=java.net.URI'
+	eStore {
+		def apiYaml= "${rootDir}/src/main/resources/api/openapi.yaml"
+		def configJson = "${rootDir}/src/main/resources/api/config.json"
+		inputFile = file(apiYaml)
+		def ignoreFile = file("${rootDir}/src/main/resources/api/.openapi-generator-ignore")
+						code {
+					language = 'spring'
+					configFile = file(configJson)
+					rawOptions = ['--ignore-file-override',
+								  ignoreFile,
+								  '--type-mappings', typeMappings,
+								  '--import-mappings',
+								  importMappings]
+							as List<String>
+					components = [models: true, apis: true,supportingFiles: 'ApiUtil.java']
+					dependsOn validation
+				}
+	}
+}
+
+compileJava.dependsOn swaggerSources.eStore.code
+
+processResources {
+	dependsOn(generateSwaggerCode)
+}
+
+sourceSets.main.java.srcDir "${swaggerSources.eStore.code.outputDir}/src/main/java"
+sourceSets.main.resources.srcDir "${swaggerSources.eStore.code.outputDir}/src/main/resources"
 
 tasks.named('test') {
 	useJUnitPlatform()
