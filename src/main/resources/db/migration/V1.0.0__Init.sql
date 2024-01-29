@@ -75,8 +75,8 @@ insert into ecomm.product_tag values ('837ab141-399e-4c1f-9abc-bace40296bac', '0
 
 create TABLE IF NOT EXISTS ecomm."user" (
     id              uuid NOT NULL DEFAULT random_uuid(),
-    username        varchar(16),
-    password        varchar(40),
+    username        varchar(16) NOT NULL,
+    password        varchar(40) NOT NULL,
     first_name      varchar(16),
     last_name       varchar(16),
     email           varchar(24),
