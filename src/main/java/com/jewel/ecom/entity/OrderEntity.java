@@ -1,6 +1,7 @@
 package com.jewel.ecom.entity;
 
 import com.jewel.ecom.api.model.Authorization;
+import com.jewel.ecom.api.model.Order.StatusEnum;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -8,160 +9,169 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 public class OrderEntity {
     @Id
     @GeneratedValue
-    @Column(name = "ID", nullable = false, updatable = false)
+    @Column(name = "ID", updatable = false, nullable = false)
     private UUID id;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "CUSTOMER_ID", nullable = false)
-    private UserEntity customer;
-
-    @ManyToOne
-    @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID", insertable = false, updatable = false)
-    private AddressEntity address;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "CARD_ID")
-    private CardEntity card;
-
-    @Column(name = "ORDER_DATE")
-    private Timestamp orderDate;
 
     @Column(name = "TOTAL")
     private BigDecimal total;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "PAYMENT_ID", referencedColumnName = "ID")
-    private PaymentEntity payment;
+    @Column(name = "STATUS")
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="CUSTOMER_ID", nullable=false)
+    private UserEntity userEntity;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID", insertable=false, updatable=false)
+    private AddressEntity addressEntity;
+
+    @OneToOne(cascade = CascadeType.ALL )
+    @JoinColumn(name = "PAYMENT_ID", referencedColumnName = "ID")
+    private PaymentEntity paymentEntity;
+
+    @JoinColumn(name = "SHIPMENT_ID", referencedColumnName = "ID")
     @OneToOne
-    @JoinColumn(name = "SHIPMENT_ID")
     private ShipmentEntity shipment;
 
-    @Column(name = "STATUS")
-    private String status;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "CARD_ID", referencedColumnName = "ID")
+    private CardEntity cardEntity;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @Column(name = "ORDER_DATE")
+    private Timestamp orderDate;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
-            name = "order_item",
+            name = "ORDER_ITEM",
             joinColumns = @JoinColumn(name = "ORDER_ID"),
             inverseJoinColumns = @JoinColumn(name = "ITEM_ID")
     )
     private List<ItemEntity> items = new ArrayList<>();
 
-    @OneToOne(mappedBy = "order")
-    private AuthorizationEntity authorization;
-
-
-    // getter setter, constractor
+    @OneToOne(mappedBy = "orderEntity")
+    private AuthorizationEntity authorizationEntity;
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public OrderEntity setId(UUID id) {
         this.id = id;
-    }
-
-    public UserEntity getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(UserEntity customer) {
-        this.customer = customer;
-    }
-
-    public AddressEntity getAddress() {
-        return address;
-    }
-
-    public void setAddress(AddressEntity address) {
-        this.address = address;
-    }
-
-    public CardEntity getCard() {
-        return card;
-    }
-
-    public void setCard(CardEntity card) {
-        this.card = card;
-    }
-
-    public Timestamp getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Timestamp orderDate) {
-        this.orderDate = orderDate;
+        return this;
     }
 
     public BigDecimal getTotal() {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
+    public OrderEntity setTotal(BigDecimal total) {
         this.total = total;
+        return this;
     }
 
-    public PaymentEntity getPayment() {
-        return payment;
-    }
-
-    public void setPayment(PaymentEntity payment) {
-        this.payment = payment;
-    }
-
-    public ShipmentEntity getShipment() {
-        return shipment;
-    }
-
-    public void setShipment(ShipmentEntity shipment) {
-        this.shipment = shipment;
-    }
-
-    public String getStatus() {
+    public StatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public OrderEntity setStatus(StatusEnum status) {
         this.status = status;
+        return this;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public OrderEntity setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+        return this;
+    }
+
+    public AddressEntity getAddressEntity() {
+        return addressEntity;
+    }
+
+    public OrderEntity setAddressEntity(AddressEntity addressEntity) {
+        this.addressEntity = addressEntity;
+        return this;
+    }
+
+    public PaymentEntity getPaymentEntity() {
+        return paymentEntity;
+    }
+
+    public OrderEntity setPaymentEntity(PaymentEntity paymentEntity) {
+        this.paymentEntity = paymentEntity;
+        return this;
+    }
+
+    public ShipmentEntity getShipments() {
+        return shipment;
+    }
+
+    public OrderEntity setShipments(ShipmentEntity shipment) {
+        this.shipment = shipment;
+        return this;
+    }
+
+    public CardEntity getCardEntity() {
+        return cardEntity;
+    }
+
+    public OrderEntity setCardEntity(CardEntity cardEntity) {
+        this.cardEntity = cardEntity;
+        return this;
+    }
+
+    public Timestamp getOrderDate() {
+        return orderDate;
+    }
+
+    public OrderEntity setOrderDate(Timestamp orderDate) {
+        this.orderDate = orderDate;
+        return this;
     }
 
     public List<ItemEntity> getItems() {
         return items;
     }
 
-    public void setItems(List<ItemEntity> items) {
+    public OrderEntity setItems(List<ItemEntity> items) {
         this.items = items;
+        return this;
     }
 
-    public AuthorizationEntity getAuthorization() {
-        return authorization;
+    public AuthorizationEntity getAuthorizationEntity() {
+        return authorizationEntity;
     }
 
-    public void setAuthorization(AuthorizationEntity authorization) {
-        this.authorization = authorization;
+    public OrderEntity setAuthorizationEntity(
+            AuthorizationEntity authorizationEntity) {
+        this.authorizationEntity = authorizationEntity;
+        return this;
     }
 
     @Override
     public String toString() {
         return "OrderEntity{" +
                 "id=" + id +
-                ", customer=" + customer +
-                ", address=" + address +
-                ", card=" + card +
-                ", orderDate=" + orderDate +
                 ", total=" + total +
-                ", payment=" + payment +
+                ", status=" + status +
+                ", userEntity=" + userEntity +
+                ", addressEntity=" + addressEntity +
+                ", paymentEntity=" + paymentEntity +
                 ", shipment=" + shipment +
-                ", status='" + status + '\'' +
+                ", cardEntity=" + cardEntity +
+                ", orderDate=" + orderDate +
                 ", items=" + items +
-                ", authorization=" + authorization +
+                ", authorizationEntity=" + authorizationEntity +
                 '}';
     }
 }
