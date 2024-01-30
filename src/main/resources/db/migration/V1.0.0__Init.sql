@@ -1,7 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS ecomm;
 
 CREATE TABLE IF NOT EXISTS ecomm.product (
-    id              uuid NOT NULL DEFAULT random__uuid(),
+    id              uuid NOT NULL DEFAULT random_uuid(),
     name            VARCHAR(56) NOT NULL,
     description     VARCHAR(200),
     price           NUMERIC(16, 4) DEFAULT 0 NOT NULL,

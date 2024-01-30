@@ -4,14 +4,12 @@ info:
   description: >
     'This is a ***sample ecommerce app API***.  You can find out more about Swagger at [swagger.io](http://swagger.io).
     Description supports markdown markup. For example, you can use the `inline code` using back ticks.'
-  termsOfService: https://github.com/Jewel73/rest-api-design/blob/main/LICENSE
+  termsOfService: https://github.com/PacktPublishing/Modern-API-Development-with-Spring-and-Spring-Boot/blob/master/LICENSE
   contact:
-    name: Packt Support
-    url: https://www.packt.com
     email: support@packtpub.com
   license:
     name: MIT
-    url: https://github.com/Jewel73/rest-api-design/blob/main/LICENSE
+    url: https://github.com/PacktPublishing/Modern-API-Development-with-Spring-and-Spring-Boot/blob/master/LICENSE
   version: 1.0.0
 externalDocs:
   description: Any document link you want to generate along with API.
@@ -26,20 +24,17 @@ tags:
       url: http://swagger.io
   - name: order
     description: Operation about orders
-  - name: user
-    description: Operations about users
   - name: customer
     description: Operations about user's persona customer
   - name: address
     description: Operations about user's address
   - name: payment
     description: Operations about payments
-  - name: shipping
+  - name: shipment
     description: Operations about shippings
   - name: product
     description: Operations about products
-  - name: card
-    description: card operation
+
 
 paths:
   /api/v1/carts/{customerId}:
@@ -62,14 +57,10 @@ paths:
           content:
             application/xml:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Cart'
+                $ref: '#/components/schemas/Cart'
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Cart'
+                $ref: '#/components/schemas/Cart'
         404:
           description: Given customer ID doesn't exist
           content: {}
@@ -227,14 +218,10 @@ paths:
           content:
             application/xml:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/Item'
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/Item'
         404:
           description: Given item (product) ID doesn't exist
           content: {}
@@ -282,14 +269,10 @@ paths:
           content:
             application/xml:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/Order'
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/Order'
         406:
           description: If payment is not authorized.
           content: {}
@@ -329,7 +312,7 @@ paths:
         - order
       summary: Returns the order of given order ID
       description: Returns orders of given order ID
-      operationId: getOrdersByOrderId
+      operationId: getByOrderId
       parameters:
         - name: id
           in: path
@@ -418,7 +401,7 @@ paths:
         - customer
       summary: Returns all customer's cards
       description: Returns all customer's cards based on given customer ID
-      operationId: getCardsByCustomerId
+      operationId: getCardByCustomerId
       parameters:
         - name: id
           in: path
@@ -456,7 +439,9 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Address'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Address'
             application/json:
               schema:
                 $ref: '#/components/schemas/Address'
@@ -570,8 +555,8 @@ paths:
     post:
       tags:
         - card
-      summary: Creates a  new card
-      description: Creates a new card. or replaces the existing one
+      summary: Creates a new user addresses
+      description: Creates a new user addresses. Does nothing if address already exists.
       operationId: registerCard
       requestBody:
         content:
@@ -664,7 +649,7 @@ paths:
       description: Return the payment authorization for the specified order
       operationId: getOrdersPaymentAuthorization
       parameters:
-        - name: id
+        - name: orderId
           in: query
           description: Order Identifier
           required: true
@@ -676,14 +661,10 @@ paths:
           content:
             application/xml:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Authorization'
+                $ref: '#/components/schemas/Authorization'
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Authorization'
+                $ref: '#/components/schemas/Authorization'
   /api/v1/shipping:
     post:
       tags:
@@ -700,8 +681,8 @@ paths:
             schema:
               $ref: '#/components/schemas/ShippingReq'
       responses:
-        200:
-          description: For successful fetch.
+        201:
+          description: For successful post.
           content:
             application/xml:
               schema:
@@ -709,15 +690,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Authorization'
+  /api/v1/shipping/{id}:
     get:
       tags:
-        - shipping
+        - shipment
       summary: Return the Shipment
       description: Return the Shipment for the specified order
       operationId: getShipmentByOrderId
       parameters:
         - name: id
-          in: query
+          in: path
           description: Order Identifier
           required: true
           schema:
@@ -816,6 +798,9 @@ components:
       description: Shopping Cart of the user
       type: object
       properties:
+        id:
+          description: Cart Identifier
+          type: string
         customerId:
           description: Id of the customer who possesses the cart
           type: string
@@ -837,8 +822,7 @@ components:
           format: int32
         unitPrice:
           description: The item's price per unit
-          type: number
-          format: double
+          $ref: '#/components/schemas/BigDecimal'
     Order:
       description: Represents an order
       type: object
@@ -863,8 +847,7 @@ components:
             $ref: '#/components/schemas/Item'
         total:
           description: Order total
-          type: number
-          format: double
+          $ref: '#/components/schemas/BigDecimal'
         payment:
           $ref: '#/components/schemas/Payment'
         shipment:
@@ -894,6 +877,9 @@ components:
     Address:
       type: object
       properties:
+        id:
+          description: Order identifier
+          type: string
         number:
           description: house of flat number
           type: string
@@ -920,14 +906,19 @@ components:
     Card:
       type: object
       properties:
+        id:
+          description: Order identifier
+          type: string
         cardNumber:
           description: Card Number
           type: string
         expires:
           description: Expiration date
           type: string
-        ccv:
-          description: CCV code
+        cvv:
+          description: CVV code
+          type: string
+        userId:
           type: string
       xml:
         name: Card
@@ -938,12 +929,15 @@ components:
         - type: object
           properties:
             userId:
-              type: object
+              type: string
       xml:
         name: AddCardReq
     Payment:
       type: object
       properties:
+        id:
+          description: Order identifier
+          type: string
         authorized:
           description: Flag that specified whether payment is authorized or not
           type: boolean
@@ -955,8 +949,8 @@ components:
     Shipment:
       type: object
       properties:
-        orderId:
-          description: Order Identifier
+        id:
+          description: Shipment Identifier
           type: string
         carrier:
           description: Shipping Carrier
@@ -990,8 +984,7 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
         username:
           type: string
         firstName:
@@ -1005,33 +998,32 @@ components:
         phone:
           type: string
         userStatus:
-          type: integer
-          description: User Status
-          format: int32
+          type: string
       xml:
         name: User
     NewOrder:
       description: Contains the new order request information
       type: object
       properties:
-        customer:
-          #description: URI that should be used to fetch the customer
-          $ref: '#/components/schemas/URI'
+        customerId:
+          type: string
         address:
-          #description: URI that should be used to fetch the address
-          $ref: '#/components/schemas/URI'
+          $ref: '#/components/schemas/Address'
         card:
-          #description: URI that should be used to fetch the payment card
-          $ref: '#/components/schemas/URI'
+          $ref: '#/components/schemas/Card'
         items:
-          #description: URI that should be used to fetch the items from shopping cart
-          $ref: '#/components/schemas/URI'
+          description: Items in shopping cart
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
       xml:
         name: NewOrder
     URI:
       type: object
       xml:
         name: URI
+    BigDecimal:
+      type: number
     Authorization:
       type: object
       properties:
@@ -1068,8 +1060,7 @@ components:
           $ref: '#/components/schemas/Card'
         amount:
           description: Payment amount
-          type: number
-          format: double
+          $ref: '#/components/schemas/BigDecimal'
       xml:
         name: PaymentReq
     CustomerInfoOnCard:
@@ -1102,8 +1093,7 @@ components:
           type: string
         price:
           description: Product price
-          type: number
-          format: double
+          $ref: '#/components/schemas/BigDecimal'
         count:
           description: Product count
           type: integer
@@ -1111,6 +1101,15 @@ components:
         tag:
           description: Tags associated with the product
           type: array
-          uniqueItems: true
           items:
-            type: string
+            $ref: '#/components/schemas/Tag'
+    Tag:
+      description: Tag information
+      type: object
+      properties:
+        id:
+          description: Tag identifier
+          type: string
+        name:
+          description: Tag Name
+          type: string

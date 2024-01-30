@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "product")
@@ -40,74 +38,93 @@ public class ProductEntity {
             joinColumns = @JoinColumn(name = "PRODUCT_ID"),
             inverseJoinColumns = @JoinColumn(name = "TAG_ID")
     )
-    private Set<TagEntity> tags = new HashSet<>();
+    private List<TagEntity> tags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<ItemEntity> items = new ArrayList<>();
+
+    public ProductEntity(UUID id, @NotNull(message = "Product name is required.") String name,
+                         String description, BigDecimal price, int count, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.count = count;
+        this.imageUrl = imageUrl;
+    }
+
+    public ProductEntity() {
+    }
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public ProductEntity setId(UUID id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public ProductEntity setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public ProductEntity setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public ProductEntity setPrice(BigDecimal price) {
         this.price = price;
+        return this;
     }
 
     public int getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public ProductEntity setCount(int count) {
         this.count = count;
+        return this;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public ProductEntity setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+        return this;
     }
 
-    public Set<TagEntity> getTags() {
+    public List<TagEntity> getTags() {
         return tags;
     }
 
-    public void setTags(Set<TagEntity> tags) {
+    public ProductEntity setTags(List<TagEntity> tags) {
         this.tags = tags;
+        return this;
     }
 
-    @Override
-    public String toString() {
-        return "ProductEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", count=" + count +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", tags=" + tags +
-                '}';
+    public List<ItemEntity> getItem() {
+        return items;
+    }
+
+    public ProductEntity setItem(List<ItemEntity> item) {
+        this.items = item;
+        return this;
     }
 }

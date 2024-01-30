@@ -6,7 +6,9 @@ public enum ErrorCode {
     HTTP_MEDIA_TYPE_NOT_ACCEPTABLE("ECOM-0004", "Requested 'Accept' header value is not supported. Please use application/json or application/xml as 'Accept' "),
     HTTP_MESSAGE_NOT_READABLE("ECOM-0006", "Make sure request payload should be a valid JSON or XML object according to 'Content-Type' "),
     HTTP_MESSAGE_NOT_WRITABLE("ECOM-0003", "Missing 'Accept' header. Please add 'Accept' header"),
-    JSON_PARSE_ERROR("ECOM-0005", "Make sure request payload should be a valid JSON object.");;
+    JSON_PARSE_ERROR("ECOM-0005", "Make sure request payload should be a valid JSON object."),
+    RESOURCE_NOT_FOUND("ECOM-0006", "Requested resource not found"),
+    CUSTOMER_NOT_FOUND("ECOM-0007", "Requested customer not found"),;
 
     private String errorCode;
     private String errorMsgKey;

@@ -55,7 +55,7 @@ public class OrderEntity {
     )
     private List<ItemEntity> items = new ArrayList<>();
 
-    @OneToOne(mappedBy = "orderEntity")
+    @OneToOne(mappedBy = "order")
     private AuthorizationEntity authorizationEntity;
 
     public UUID getId() {

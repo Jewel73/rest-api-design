@@ -2,6 +2,7 @@ package com.jewel.ecom.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,65 +30,61 @@ public class CardEntity {
     @JoinColumn(name = "USER_ID")
     private UserEntity user;
 
+    @OneToMany(mappedBy = "cardEntity", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<OrderEntity> orders;
     //getter setter
 
     public UUID getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public CardEntity setId(UUID id) {
         this.id = id;
+        return this;
     }
 
     public String getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public CardEntity setNumber(String number) {
         this.number = number;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+        return this;
     }
 
     public String getExpires() {
         return expires;
     }
 
-    public void setExpires(String expires) {
+    public CardEntity setExpires(String expires) {
         this.expires = expires;
+        return this;
     }
 
     public String getCvv() {
         return cvv;
     }
 
-    public void setCvv(String cvv) {
+    public CardEntity setCvv(String cvv) {
         this.cvv = cvv;
+        return this;
     }
 
     public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user) {
+    public CardEntity setUser(UserEntity user) {
         this.user = user;
+        return this;
     }
 
-    @Override
-    public String toString() {
-        return "CardEntity{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", expires='" + expires + '\'' +
-                ", cvv='" + cvv + '\'' +
-                ", user=" + user +
-                '}';
+    public List<OrderEntity> getOrderEntity() {
+        return orders;
+    }
+
+    public CardEntity setOrderEntity(List<OrderEntity> orders) {
+        this.orders = orders;
+        return this;
     }
 }
