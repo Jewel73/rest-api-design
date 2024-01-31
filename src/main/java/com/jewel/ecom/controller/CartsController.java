@@ -21,7 +21,7 @@ public class CartsController implements CartApi {
     }
 
     @Override
-    public ResponseEntity<List<Cart>> getCartByCustomerId(String customerId) {
+    public ResponseEntity<Cart> getCartByCustomerId(String customerId) {
         throw new RuntimeException("Manual exception thrown");
     }
 }
