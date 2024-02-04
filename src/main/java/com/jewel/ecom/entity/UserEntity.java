@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user")
+@Table(name = "\"user\"")
 public class UserEntity {
     @Id
     @GeneratedValue
@@ -48,7 +48,7 @@ public class UserEntity {
     )
     private List<AddressEntity> address = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CardEntity> cards = new ArrayList<>();
 
     public UUID getId() {

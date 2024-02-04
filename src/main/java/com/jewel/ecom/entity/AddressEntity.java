@@ -42,6 +42,9 @@ public class AddressEntity {
     // Getters and setters
 
 
+    public UUID getId() {
+       return id;
+    }
     public AddressEntity setId(UUID id) {
         this.id = id;
         return this;
