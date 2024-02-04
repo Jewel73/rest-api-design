@@ -1,27 +1,69 @@
 package com.jewel.ecom.controller;
 
+import static org.springframework.http.ResponseEntity.accepted;
+import static org.springframework.http.ResponseEntity.ok;
+
 import com.jewel.ecom.api.CartApi;
 import com.jewel.ecom.api.model.Cart;
 import com.jewel.ecom.api.model.Item;
+import com.jewel.ecom.hateoas.CartRepresentationModelAssembler;
+import com.jewel.ecom.service.CartService;
+import jakarta.validation.Valid;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @RestController
 public class CartsController implements CartApi {
-    Logger log = LoggerFactory.getLogger(CartsController.class);
+
+    private static final Logger log = LoggerFactory.getLogger(CartsController.class);
+    private final CartService service;
+    private final CartRepresentationModelAssembler assembler;
+
+    public CartsController(CartService service, CartRepresentationModelAssembler assembler) {
+        this.service = service;
+        this.assembler = assembler;
+    }
 
     @Override
-    public ResponseEntity<List<Item>> addCartItemsByCustomerId(String customerId, Item item) throws Exception {
-        log.info("Request for customer ID: {} \nItem: {}", customerId, item);
-        return CartApi.super.addCartItemsByCustomerId(customerId, item);
+    public ResponseEntity<List<Item>> addCartItemsByCustomerId(String customerId, @Valid Item item) {
+        log.info("Request for customer ID: {}\nItem: {}", customerId, item);
+        return ok(service.addCartItemsByCustomerId(customerId, item));
+    }
+
+    @Override
+    public ResponseEntity<List<Item>> addOrReplaceItemsByCustomerId(String customerId,
+                                                                    @Valid Item item) {
+        return ok(service.addOrReplaceItemsByCustomerId(customerId, item));
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteCart(String customerId) {
+        service.deleteCart(customerId);
+        return accepted().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteItemFromCart(String customerId, String itemId) {
+        service.deleteItemFromCart(customerId, itemId);
+        return accepted().build();
     }
 
     @Override
     public ResponseEntity<Cart> getCartByCustomerId(String customerId) {
-        throw new RuntimeException("Manual exception thrown");
+        return ok(assembler.toModel(service.getCartByCustomerId(customerId)));
+    }
+
+    @Override
+    public ResponseEntity<List<Item>> getCartItemsByCustomerId(String customerId) {
+        return ok(service.getCartItemsByCustomerId(customerId));
+    }
+
+    @Override
+    public ResponseEntity<Item> getCartItemsByItemId(String customerId, String itemId) {
+        return ok(service.getCartItemsByItemId(customerId, itemId));
     }
 }
