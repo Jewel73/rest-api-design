@@ -16,10 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-/**
- * @author : github.com/sharmasourabh
- * @project : Chapter04 - Modern API Development with Spring and Spring Boot Ed 2
- **/
+
 @Component
 public class AddressRepresentationModelAssembler extends
         RepresentationModelAssemblerSupport<AddressEntity, Address> {
