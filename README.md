@@ -1,12 +1,11 @@
+Certainly! Below is a README template for your Gradle project named `rest-api-design`:
 
-
----
-
-# E-Commerce API
+```markdown
+# REST API Design - Gradle Project
 
 ## Overview
 
-Welcome to the E-Commerce API project! This API follows best practices in API design, utilizing the OpenAPI specification, Flyway for database migrations, exceptional handling, and HATEOAS hypermedia links. This documentation will guide you through the setup, usage, and features of the API.
+Welcome to the REST API Design project! This API follows best practices in API design, utilizing the OpenAPI specification, Flyway for database migrations, exceptional handling, and HATEOAS hypermedia links. This documentation will guide you through the setup, usage, and features of the API.
 
 ## Getting Started
 
@@ -15,7 +14,7 @@ Welcome to the E-Commerce API project! This API follows best practices in API de
 Ensure you have the following installed:
 
 - [Java 17](https://openjdk.java.net/projects/jdk/17/)
-- [Spring Boot 3.x](https://spring.io/projects/spring-boot)
+- [Gradle](https://gradle.org/)
 - [Flyway](https://flywaydb.org/)
 - [Your Database Server] (e.g., PostgreSQL, MySQL)
 
@@ -24,14 +23,14 @@ Ensure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/e-commerce-api.git
+   git clone https://github.com/your-username/rest-api-design.git
    ```
 
 2. Build the project:
 
    ```bash
-   cd e-commerce-api
-   ./mvnw clean install
+   cd rest-api-design
+   ./gradlew build
    ```
 
 3. Configure your database settings in `src/main/resources/application.properties`.
@@ -39,7 +38,7 @@ Ensure you have the following installed:
 4. Run the application:
 
    ```bash
-   ./mvnw spring-boot:run
+   ./gradlew bootRun
    ```
 
    The API will be available at `http://localhost:8080`.
@@ -63,7 +62,7 @@ Provide usage examples with code snippets.
 Explain how to manage database migrations using Flyway.
 
 ```bash
-./mvnw flyway:migrate
+./gradlew flywayMigrate
 ```
 
 ## Exception Handling
@@ -85,7 +84,6 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+```
 
----
-
-Feel free to adjust the paths and details based on your project's structure and requirements.
+Feel free to modify it according to your specific needs. Copy and paste this content into your `README.md` file, and adjust any paths, URLs, or details based on your project's structure and requirements.
