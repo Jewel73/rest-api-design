@@ -1,6 +1,4 @@
-Certainly! Below is a README template for your Gradle project named `rest-api-design`:
 
-```markdown
 # REST API Design - Gradle Project
 
 ## Overview
