@@ -21,7 +21,7 @@ Ensure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/rest-api-design.git
+   git clone https://github.com/jewel73/rest-api-design.git
    ```
 
 2. Build the project:
